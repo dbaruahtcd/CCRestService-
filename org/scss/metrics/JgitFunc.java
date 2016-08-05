@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -141,7 +142,21 @@ public class JgitFunc {
     // gets the user info related to a remote repository
     public String getCommiterIdentity()
     {
-    	re
+       		Config config = repository.getConfig();
+            String name = config.getString("user", null, "name");
+            String email = config.getString("user", null, "email");
+            if (name == null || email == null) {
+                System.out.println("User identity is unknown!");
+            } else {
+               // System.out.println("User identity is " + name + " <" + email + ">");
+            	return name + " <" + email + ">";
+            }
+
+            /*String url = config.getString("remote", "origin", "url");
+            if (url != null) {
+                    System.out.println("Origin comes from " + url);
+            }*/
+    	 return null;
     }
     
     
