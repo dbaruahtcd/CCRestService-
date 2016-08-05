@@ -1,5 +1,7 @@
 package org.scss.metrics;
 
+import org.scss.jgit.helper.*;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +25,7 @@ public class FileHandler {
 		if (fr == null || !fr.exists())
 			return null;
 
-		String pattern = ".*\\.java.*"; // "([a-zA-Z])([\\.java])";
+		String pattern = FixedParams.getFilePattern(); //".*\\.java.*"; // "([a-zA-Z])([\\.java])";
 
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = null;

@@ -188,7 +188,7 @@ public class RestRequestHandler {
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException
 	{
 		RestRequestHandler request = new RestRequestHandler();
-		request.serverRequest("https://github.com/facebook/css-layout.git",false);
+		request.serverRequest("https://github.com/facebook/WebDriverAgent.git",false);
 	}
 	
 	
