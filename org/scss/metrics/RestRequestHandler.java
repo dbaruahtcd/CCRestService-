@@ -5,6 +5,7 @@ import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.lib.Repository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.scss.jgit.helper.FixedParams;
 import org.scss.jgit.porcelain.*;
 
 import java.io.File;
@@ -27,6 +28,9 @@ public class RestRequestHandler {
 	@SuppressWarnings({ "unused", "unchecked" })
 	public void serverRequest(String url, Boolean val) throws IOException, NoHeadException, GitAPIException
 	{
+		//setting the project url value for the json file
+		FixedParams.setProjectUrl(url);
+		
 		// download a remote repository
 		CloneRemoteRepository  cloneRemote = new CloneRemoteRepository();
 		File dotGitDir = cloneRemote.cloneRepo(url, val);
@@ -54,6 +58,9 @@ public class RestRequestHandler {
 	    
 		 //headerObj.put("Date :", ""+LocalDateTime.now()+"");
 		 createJsonHeader("Date", ""+ LocalDateTime.now());
+		 
+		 createJsonHeader("ProjectURL", FixedParams.getRemoteUrl());
+		 createJsonHeader("Commiter",metrics.getCommiterIdentity() );
 		 
 	     createJsonFile(gitParentDir.getName());
 		 
@@ -130,6 +137,12 @@ public class RestRequestHandler {
 			case "RunTime":
 				header.put("TotalRunTime",value);
 				break;
+				
+			case "Url" :
+				header.put("ProjectUrl", value);
+			
+			case "Commiter":
+				header.put("Commiter", value);
 				
 			default :
 				System.out.println("None of the keywords matched" + keyword);
