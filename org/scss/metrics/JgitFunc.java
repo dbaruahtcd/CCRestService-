@@ -38,6 +38,7 @@ public class JgitFunc {
         //gitRepo = fileLoc;
         try {
             repo = new OpenRepository(new File(fileLoc));
+            repository = repo.initRepo();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -96,8 +97,7 @@ public class JgitFunc {
     private int countDirectoryCommits() throws NoHeadException, GitAPIException, IOException
     {
         int count;
-		repository = repo.initRepo();
-        try (Git git = new Git(repository)) {
+		try (Git git = new Git(repository)) {
             Iterable<RevCommit> logs = git.log()
                     .call();
         logs = git.log()
@@ -114,10 +114,11 @@ public class JgitFunc {
         return count;
     }
 
-    
+    //returns the number of commits made to a file
+    @SuppressWarnings("unused")
     public Integer countLogsForFile(String fileLoc) throws IOException, NoHeadException, GitAPIException
     {
-        repository = repo.initRepo();
+       
         try (Git git = new Git(repository)) {
             Iterable<RevCommit> logs = git.log()
                     .call();
@@ -136,6 +137,13 @@ public class JgitFunc {
             return count;
         }
     }
+    
+    // gets the user info related to a remote repository
+    public String getCommiterIdentity()
+    {
+    	re
+    }
+    
     
     //returns the relative file as needed for finding the git commit
     public static String getRelativePath(String path, String base)
