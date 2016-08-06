@@ -28,6 +28,9 @@ public class RestRequestHandler {
 	@SuppressWarnings({ "unused", "unchecked" })
 	public void serverRequest(String url, Boolean val) throws IOException, NoHeadException, GitAPIException
 	{
+		// creating a new JSONbody object
+		JSONObject createJsonBodyObj = new JSONObject();
+		
 		//setting the project url value for the json file
 		FixedParams.setProjectUrl(url);
 		
@@ -73,13 +76,22 @@ public class RestRequestHandler {
             int commitCount = metrics.countCommitsForFile(relPath);
             
             
-            String fileName = "FileName : " + ""+FileHandler.getFileName(str)+"";
+           /* String fileName = "FileName : " + ""+FileHandler.getFileName(str)+"";
             String complexity = "Complexity : " + ""+complexityCountFile+"";
-            String commits = "#Commits : " + ""+commitCount+"";
+            String commits = "#Commits : " + ""+commitCount+"";*/
             
-            addJsonArray("FileName", fileName);
+            
+            
+            createJsonBodyObj.put("FileName ", FileHandler.getFileName(str));
+            createJsonBodyObj.put("Complexity", complexityCountFile);
+            createJsonBodyObj.put("#Commits", commitCount);
+            
+            //adding the individual json object to the array
+            fileInfoArray.add(createJsonBodyObj);
+            
+            /*addJsonArray("FileName", fileName);
             addJsonArray("Complexity", complexity);
-            addJsonArray("Commits", commits);
+            addJsonArray("Commits", commits);*/
             
             
            /* fileInfo.add("FileName : " + ""+getFileName(str)+"");
@@ -149,6 +161,29 @@ public class RestRequestHandler {
 		}
 				
 			
+	}
+	
+	// creates a new structure for json body
+	public void createJsonBody(String keyword, String value, JSONObject bodyObj)
+	{
+		switch(keyword)
+		{
+		case "FileName" :
+			bodyObj.put("Filename ", value);
+			break;
+			
+		case "Complexity" :
+			bodyObj.put("Complexity ", value);
+			break;
+			
+		case "Commits" :
+			bodyObj.put("#Commits", value);
+			break;
+			
+			default:
+				System.out.println("Body keyword didn't match" + keyword);
+				
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
