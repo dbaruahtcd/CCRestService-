@@ -7,7 +7,7 @@ public final class FixedParams {
 	protected static final String FILE_PATTERN = ".*(\\.js.*)|(.*\\.cpp.*)|(.*\\.py.*)|(.*\\.c)|(.*\\.rb)|(.*\\.php)|(.*\\.java)|(.*\\.sh)|(.*\\.ml)|(.*\\.hs)"; // hs haskell ml - ocaml
 	private static String projectUrl = "";
 	//private static final String FILE_PATTERN1 = ".*(\\.js.*)|(.*\\.cpp.*)|(.*\\.py.*)|(.*\\.c)|(.*\\.rb)|(.*\\.php)|(.*\\.java)";
-
+	private static String localDirName = "";
 
 	public static String getRemoteUrl() {
 		return REMOTE_URL;
@@ -24,7 +24,7 @@ public final class FixedParams {
 		
 	}
 	
-	public String getProjectUrl()
+	public static String getProjectUrl()
 	{ 
 		return projectUrl;
 	}
@@ -33,5 +33,14 @@ public final class FixedParams {
 	{
 		projectUrl = url;
 	}
-
+	
+	public static String getLocalDirName()
+	{
+		return localDirName;
+	}
+	
+	public static void setLocalDirName(String name)
+	{
+		localDirName = name;
+	}
 }

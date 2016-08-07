@@ -1,5 +1,7 @@
 package org.scss.jgit.porcelain;
 
+
+import org.scss.jgit.helper.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,7 +19,8 @@ public class CloneRemoteRepository {
     public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
     	
     	CloneRemoteRepository clone = new CloneRemoteRepository();
-    	File res = clone.cloneRepo(null, false);
+    	FixedParams.setProjectUrl("https://github.com/facebook/rocksdb.git");
+    	File res = clone.cloneRepo("https://github.com/facebook/rocksdb.git", false);
     	System.out.println("the git repo is :" + res.getParentFile());
         
     }
@@ -31,8 +34,11 @@ public class CloneRemoteRepository {
 			if (remoteUrl == null) {
 				remoteUrl = FixedParams.getRemoteUrl();
 			}
-
-			File localPath = File.createTempFile("TestGitRepository", "");
+			String fileName = GetFileName.getFileNameFromUrl(FixedParams.getProjectUrl());
+			FixedParams.setLocalDirName(fileName);
+			System.out.println("File name : " + fileName);
+			
+			File localPath = File.createTempFile(fileName, "");
 			localPath.delete();
 
 			System.out.println("Cloning from :" + remoteUrl + " to " + localPath);

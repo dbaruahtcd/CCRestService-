@@ -28,9 +28,7 @@ public class RestRequestHandler {
 	@SuppressWarnings({ "unused", "unchecked" })
 	public void serverRequest(String url, Boolean val) throws IOException, NoHeadException, GitAPIException
 	{
-		// creating a new JSONbody object
-		JSONObject createJsonBodyObj = new JSONObject();
-		
+			
 		//setting the project url value for the json file
 		FixedParams.setProjectUrl(url);
 		
@@ -70,6 +68,10 @@ public class RestRequestHandler {
 		long start = System.currentTimeMillis();
 		for(String str : listFiles)
 		{
+			
+			// creating a new JSONbody object
+			JSONObject jsonBodyObj = new JSONObject();
+			
 			int complexityCountFile = metrics.getCyclomaticComplexity(new File(str));
 			System.out.print("complexity is : " + complexityCountFile + "\t");
             String relPath = FileHandler.getRelativePath(str, gitParentDirStr);
@@ -82,12 +84,12 @@ public class RestRequestHandler {
             
             
             
-            createJsonBodyObj.put("FileName ", FileHandler.getFileName(str));
-            createJsonBodyObj.put("Complexity", complexityCountFile);
-            createJsonBodyObj.put("#Commits", commitCount);
+            jsonBodyObj.put("FileName ", FileHandler.getFileName(str));
+            jsonBodyObj.put("Complexity", complexityCountFile);
+            jsonBodyObj.put("#Commits", commitCount);
             
             //adding the individual json object to the array
-            fileInfoArray.add(createJsonBodyObj);
+            fileInfoArray.add(jsonBodyObj);
             
             /*addJsonArray("FileName", fileName);
             addJsonArray("Complexity", complexity);
@@ -127,7 +129,7 @@ public class RestRequestHandler {
 		switch(keyword) 
 		{
 			case "Project" :
-				header.put("Project :", ""+ value+"");
+				header.put("LocalProjectDir :", ""+ value+"");
 				break;
 			
 			case "Total" :
@@ -150,21 +152,23 @@ public class RestRequestHandler {
 				header.put("TotalRunTime",value);
 				break;
 				
-			case "Url" :
-				header.put("ProjectUrl", value);
+			case "ProjectURL" :
+				header.put("ProjectURL", value);
+				break;
 			
 			case "Commiter":
 				header.put("Commiter", value);
+				break;
 				
 			default :
-				System.out.println("None of the keywords matched" + keyword);
+				System.out.println("None of the keywords matched :" + keyword);
 		}
 				
 			
 	}
 	
 	// creates a new structure for json body
-	public void createJsonBody(String keyword, String value, JSONObject bodyObj)
+	/*public void createJsonBody(String keyword, String value, JSONObject bodyObj)
 	{
 		switch(keyword)
 		{
@@ -184,7 +188,7 @@ public class RestRequestHandler {
 				System.out.println("Body keyword didn't match" + keyword);
 				
 		}
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	public void addJsonArray(String keyword, String value)
@@ -236,7 +240,7 @@ public class RestRequestHandler {
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException
 	{
 		RestRequestHandler request = new RestRequestHandler();
-		request.serverRequest("https://github.com/facebook/WebDriverAgent.git",false);
+		request.serverRequest("https://github.com/facebook/jscodeshift.git",false);
 	}
 	
 	
