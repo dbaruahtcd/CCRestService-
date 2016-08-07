@@ -80,6 +80,7 @@ public class RestRequestHandler {
 		 
 		 createJsonHeader("ProjectURL", FixedParams.getRemoteUrl());
 		 createJsonHeader("Commiter",metrics.getCommiterIdentity() );
+		 createJsonHeader("LCommit",WalkAllCommits.getLastCommitId(repository));
 		 
 	     createJsonFile(gitParentDir.getName());
 		 
@@ -176,6 +177,10 @@ public class RestRequestHandler {
 			
 			case "Commiter":
 				header.put("Commiter", value);
+				break;
+				
+			case "LCommit" :
+				header.put("Last commit id", value);
 				break;
 				
 			default :
