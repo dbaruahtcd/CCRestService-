@@ -55,7 +55,7 @@ public class RestRequestHandler {
 		 
 		 
 	     //headerObj.put("Total project commit :", ""+jf.countDirectoryCommits()+"");
-		 createJsonHeader("Total", "" + metrics.countDirectoryCommits());
+		 createJsonHeader("Total", "" + metrics.countDirectoryCommits()); 
 	    
 		 //headerObj.put("Date :", ""+LocalDateTime.now()+"");
 		 createJsonHeader("Date", ""+ LocalDateTime.now());
@@ -240,7 +240,7 @@ public class RestRequestHandler {
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException
 	{
 		RestRequestHandler request = new RestRequestHandler();
-		request.serverRequest("https://github.com/facebook/jscodeshift.git",false);
+		request.serverRequest("https://github.com/facebook/facebook-java-ads-sdk.git",false);
 	}
 	
 	
