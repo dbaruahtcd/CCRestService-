@@ -1,5 +1,6 @@
 package org.scss.metrics;
 
+import org.scss.jgit.porcelain.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.lib.Repository;
@@ -22,20 +23,28 @@ public class RestRequestHandler {
 	static JSONObject header = new JSONObject();
 	static JSONArray fileInfoArray = new JSONArray();
 	static FileWriter jsonFile ;
+	// need for the rerun between head the previous head 	
+	private static String gitParentDirStr = null;
 	
 	// in invoked by the client facing web service
+	public static String getParentDir()
+	{
+		return gitParentDirStr;
+	}
 	
 	@SuppressWarnings({ "unused", "unchecked" })
-	public void serverRequest(String url, Boolean val) throws IOException, NoHeadException, GitAPIException
+	public void serverRequest(String url, Boolean isLocallyPresent, Boolean isReRun) throws IOException, NoHeadException, GitAPIException
 	{
-			
+		//Arraylist for storing the file urls
+		ArrayList<String>  listFiles = new ArrayList<String>();
+		
 		//setting the project url value for the json file
 		FixedParams.setProjectUrl(url);
 		
 		// download a remote repository
 		CloneRemoteRepository  cloneRemote = new CloneRemoteRepository();
-		File dotGitDir = cloneRemote.cloneRepo(url, val);
-		String gitParentDirStr = dotGitDir.getParent();
+		File dotGitDir = cloneRemote.cloneRepo(url, isLocallyPresent);
+		gitParentDirStr = dotGitDir.getParent();
 		File gitParentDir = new File(gitParentDirStr);
 		
 		// initialize  a repository
@@ -44,7 +53,16 @@ public class RestRequestHandler {
 		
 		// Get a list of all the files with their abs for which the commit has to be calculated
 		FileHandler fileHandler = new FileHandler();
-		ArrayList<String> listFiles = fileHandler.fileWalker(gitParentDir);
+		
+		if(!isReRun)
+		{
+			listFiles = fileHandler.fileWalker(gitParentDir);
+		}
+		else
+		{
+			ShowChangedFilesBetweenCommits changed = new ShowChangedFilesBetweenCommits();
+			listFiles = changed.changedFiles(repository);
+		}
 		
 		// create an getmetrics class
 		CountCommits metrics = new CountCommits(repository);
@@ -240,7 +258,7 @@ public class RestRequestHandler {
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException
 	{
 		RestRequestHandler request = new RestRequestHandler();
-		request.serverRequest("https://github.com/facebook/facebook-java-ads-sdk.git",false);
+		request.serverRequest("https://github.com/hackedteam/vector-rmi.git",false, true);
 	}
 	
 	
