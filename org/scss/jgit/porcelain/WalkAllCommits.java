@@ -48,7 +48,7 @@ public class WalkAllCommits {
 		
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
         try (Repository repository = builder.setGitDir(new File("C:/Users/Dan/Desktop/code optimization papers/code/facebook-java-ads-sdk/.git")).readEnvironment().findGitDir().build()) {
-            System.out.println("last id : " +  commit.getLastCommitId(repository));
+            System.out.println("last id : " +  getLastCommitId(repository));
         }
     }
 }
