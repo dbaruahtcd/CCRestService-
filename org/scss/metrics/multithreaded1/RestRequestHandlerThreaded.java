@@ -1,4 +1,4 @@
-package org.scss.metrics;
+package org.scss.metrics.multithreaded1;
 
 import org.scss.jgit.porcelain.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -17,7 +17,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class RestRequestHandler {
+//concurrent access
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.Future;
+
+public class RestRequestHandlerThreaded {
 
 	
 	static JSONObject header = new JSONObject();
@@ -33,7 +41,7 @@ public class RestRequestHandler {
 	}
 	
 	@SuppressWarnings({ "unused", "unchecked" })
-	public void serverRequest(String url, Boolean isLocallyPresent, Boolean isReRun) throws IOException, NoHeadException, GitAPIException
+	public void serverRequest(String url, Boolean isLocallyPresent, Boolean isReRun) throws IOException, NoHeadException, GitAPIException, InterruptedException, ExecutionException
 	{
 		//Arraylist for storing the file urls
 		ArrayList<String>  listFiles = new ArrayList<String>();
@@ -85,14 +93,21 @@ public class RestRequestHandler {
 	     createJsonFile(gitParentDir.getName());
 		 
 		long start = System.currentTimeMillis();
+		
+		ExecutorService executor = Executors.newFixedThreadPool(30);
 		for(String str : listFiles)
 		{
 			
 			// creating a new JSONbody object
 			JSONObject jsonBodyObj = new JSONObject();
 			
-			int complexityCountFile = metrics.getCyclomaticComplexity(new File(str));
-			System.out.print("complexity is : " + complexityCountFile + "\t");
+			// single threaded implementation
+			//int complexityCountFile = metrics.getCyclomaticComplexity(new File(str));
+			
+			CalculateCC worker = new CalculateCC(new File(str));
+			Future<Integer> complexityCountFile = (Future<Integer>) executor.submit(worker);
+			System.out.print("complexity is : " + complexityCountFile.get() + "\t");
+			
             String relPath = FileHandler.getRelativePath(str, gitParentDirStr);
             int commitCount = metrics.countCommitsForFile(relPath);
             
@@ -121,6 +136,7 @@ public class RestRequestHandler {
            
            
         }
+		executor.shutdown();
 		long end = System.currentTimeMillis();
 		
 		double minutes = (end - start)/1000.0;
@@ -260,10 +276,10 @@ public class RestRequestHandler {
 	 
 	}
 	
-	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException
+	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException, InterruptedException, ExecutionException
 	{
-		RestRequestHandler request = new RestRequestHandler();
-		request.serverRequest("https://github.com/hackedteam/vector-rmi.git",false, false);
+		RestRequestHandlerThreaded request = new RestRequestHandlerThreaded();
+		request.serverRequest("https://github.com/dbaruahtcd/Chat-Room-Server.git",false, false);
 	}
 	
 	
