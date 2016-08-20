@@ -119,7 +119,7 @@ public class RestRequestHandlerThreaded {
             
             
             jsonBodyObj.put("FileName ", FileHandler.getFileName(str));
-            jsonBodyObj.put("Complexity", complexityCountFile);
+            jsonBodyObj.put("Complexity", complexityCountFile.get());
             jsonBodyObj.put("#Commits", commitCount);
             
             //adding the individual json object to the array
@@ -272,14 +272,14 @@ public class RestRequestHandlerThreaded {
 		String workingDir = System.getProperty("user.dir");
 		//File newDir = new File(workingDir+"/Json");
 		//newDir.mkdirs();
-		jsonFile = new FileWriter(workingDir + "/"+fileName+"_"+System.currentTimeMillis()+".json",true);
+		jsonFile = new FileWriter(workingDir + "/"+fileName+"_"+"mThread"+"_"+System.currentTimeMillis()+".json",true);
 	 
 	}
 	
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException, InterruptedException, ExecutionException
 	{
 		RestRequestHandlerThreaded request = new RestRequestHandlerThreaded();
-		request.serverRequest("https://github.com/dbaruahtcd/Chat-Room-Server.git",false, false);
+		request.serverRequest("https://github.com/hackedteam/vector-rmi.git",false, false);
 	}
 	
 	

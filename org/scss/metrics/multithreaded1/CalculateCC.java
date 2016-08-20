@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import java.util.ArrayList;
 
 import org.scss.jgit.porcelain.GetFileName;
+import org.scss.jgit.helper.*;
 
 import java.util.concurrent.Future;
 
@@ -77,7 +78,7 @@ public class CalculateCC implements Callable<Integer>{
 	public int getCyclomaticComplexity(File fr) throws IOException
     {
         int complexity = 1;
-        String[] keywords = {"if", "for", "do", "while", "switch", "case", "default", "continue", "break", "&&", "||", "?", "else", "return"};
+        String[] keywords = FixedParams.getKeywords();//{"if", "for", "do", "while", "switch", "case", "default", "continue", "break", "&&", "||", "?", "else", "return"};
         String words = "";
         String line = null;
         FileReader f;

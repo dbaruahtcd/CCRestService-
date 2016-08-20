@@ -32,6 +32,15 @@ public class RestRequestHandler {
 		return gitParentDirStr;
 	}
 	
+	
+	/*
+	 * this function takes in three parameter 
+	 * @param url  the url of the repository
+	 * @param isLocallyPresent - if the files are already present on the computer
+	 * @param isReRun if its a run for intermediate results
+	 * @return void
+	 * 
+	 */
 	@SuppressWarnings({ "unused", "unchecked" })
 	public void serverRequest(String url, Boolean isLocallyPresent, Boolean isReRun) throws IOException, NoHeadException, GitAPIException
 	{
