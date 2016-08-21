@@ -44,7 +44,7 @@ public class CountCommits {
 				projectLogCount+= count;
 			}
 			
-			System.out.println("Had " + count + " commits on " + fn);
+		//	System.out.println("Had " + count + " commits on " + fn);
 
 			return count;
 		}

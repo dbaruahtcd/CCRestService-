@@ -32,6 +32,11 @@ public class RestRequestHandler {
 		return gitParentDirStr;
 	}
 	
+	public static void setParentDir(String loc)
+	{
+		gitParentDirStr = loc;
+	}
+	
 	
 	/*
 	 * this function takes in three parameter 
@@ -54,6 +59,7 @@ public class RestRequestHandler {
 		CloneRemoteRepository  cloneRemote = new CloneRemoteRepository();
 		File dotGitDir = cloneRemote.cloneRepo(url, isLocallyPresent);
 		gitParentDirStr = dotGitDir.getParent();
+		//setParentDir(gitParentDirStr);
 		File gitParentDir = new File(gitParentDirStr);
 		
 		// initialize  a repository
@@ -87,7 +93,7 @@ public class RestRequestHandler {
 		 //headerObj.put("Date :", ""+LocalDateTime.now()+"");
 		 createJsonHeader("Date", ""+ LocalDateTime.now());
 		 
-		 createJsonHeader("ProjectURL", FixedParams.getRemoteUrl());
+		 createJsonHeader("ProjectURL", FixedParams.getProjectUrl());
 		 createJsonHeader("Commiter",metrics.getCommiterIdentity() );
 		 createJsonHeader("LCommit",WalkAllCommits.getLastCommitId(repository));
 		 
@@ -101,7 +107,7 @@ public class RestRequestHandler {
 			JSONObject jsonBodyObj = new JSONObject();
 			
 			int complexityCountFile = metrics.getCyclomaticComplexity(new File(str));
-			System.out.print("complexity is : " + complexityCountFile + "\t");
+		//	System.out.print("complexity is : " + complexityCountFile + "\t");
             String relPath = FileHandler.getRelativePath(str, gitParentDirStr);
             int commitCount = metrics.countCommitsForFile(relPath);
             
@@ -272,7 +278,7 @@ public class RestRequestHandler {
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException
 	{
 		RestRequestHandler request = new RestRequestHandler();
-		request.serverRequest("https://github.com/hackedteam/vector-rmi.git",false, false);
+		request.serverRequest("https://github.com/antonkrasov/AndroidSocialNetworks.git",true, false);
 	}
 	
 	

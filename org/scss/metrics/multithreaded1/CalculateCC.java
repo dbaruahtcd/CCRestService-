@@ -121,12 +121,12 @@ public class CalculateCC implements Callable<Integer>{
 	// returns the complexity set my the thread's run method
 	
 	
-	public static void main(String[] args) throws InterruptedException, ExecutionException
+	public static void main(String[] args) throws InterruptedException, ExecutionException, IOException
 	{
 		
 		FileHandler fileHandler = new FileHandler();
-		ArrayList<String> fileList = fileHandler.fileWalker(new File("C:/Users/Dan/Downloads/guava-master/guava-master"));
-		
+		ArrayList<String> fileList = fileHandler.fileWalker(new File("C:/Users/Dan/AppData/Local/Temp/guava7584461915963236433/"));
+		System.out.println(fileList.size());
 		
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		
@@ -138,7 +138,7 @@ public class CalculateCC implements Callable<Integer>{
 			CalculateCC worker = new CalculateCC(new File(str));
 			Future<Integer> res = (Future<Integer>) executor.submit(worker); 
 			System.out.println("complexity of :" + str + " is " + res.get());
-			//System.out.println(i + " complexity is :" + worker.getComplexity());
+			System.out.println(i + " complexity is :" + worker.getCyclomaticComplexity(new File(str)));
 			i++;
 			
 		}

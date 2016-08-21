@@ -18,20 +18,25 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.scss.jgit.helper.FixedParams;
 import org.scss.metrics.RestRequestHandler;
+import org.scss.metrics.multithreaded1.RestRequestHandlerThreaded;
 
 public class ShowChangedFilesBetweenCommits {
 	
 	public ArrayList<String> changedFiles(Repository repository) throws IncorrectObjectTypeException, IOException, GitAPIException
 	{
 		ArrayList<String> fileUrls = new ArrayList<String>(); 
-		String absPathToGitParent =  RestRequestHandler.getParentDir();
-				
+		//important to set the git file dir loc
+		String absPathToGitParent = RestRequestHandler.getParentDir();
+		if(absPathToGitParent == null)
+			absPathToGitParent = RestRequestHandlerThreaded.getParentDir();
+		//String absPathToGitParent =   "C:/Users/Dan/AppData/Local/Temp/phonegap-facebook-plugin3422070316710183144";//RestRequestHandler.getParentDir();
+		//System.out.println("ab spath : " + absPathToGitParent);		
 				//"C:/Users/Dan/Desktop/code optimization papers/code/facebook-java-ads-sdk";
 		
 		
 				
 		
-		ObjectId oldHead = repository.resolve("HEAD^^{tree}"); 
+		ObjectId oldHead = repository.resolve("HEAD^^^{tree}"); 
         //repository.
         ObjectId head = repository.resolve("HEAD^{tree}");
         
@@ -60,9 +65,11 @@ public class ShowChangedFilesBetweenCommits {
                     //System.out.println("Entry: " + entry);
                 	
                     String relPath = getChangedFiles(entry.toString());
+                   // System.out.println("relpath" + relPath);
                     if(checkFileSuffix(relPath))
                 	{
                 		String absPath = absPathToGitParent.concat("/"+relPath);
+                		//System.out.println("abs path :" + absPath);
                 		fileUrls.add(absPath);
                 		//System.out.println("abspath :" + absPath);
                 		
@@ -96,7 +103,7 @@ public class ShowChangedFilesBetweenCommits {
 		
 		m = p.matcher(str.replace("]", ""));
 		
-		//System.out.println("str :" + str + " matcher :" + m.matches());
+	//	System.out.println("str :" + str + " matcher :" + m.matches());
 		if(m.matches())
 		{
 			//System.out.println("str :" + str);
@@ -121,7 +128,7 @@ public class ShowChangedFilesBetweenCommits {
 		
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 	       // try (Repository repository = CookbookHelper.openJGitCookbookRepository()) {
-	    Repository repository = builder.setGitDir(new File("C:/Users/Dan/Desktop/code optimization papers/code/facebook-java-ads-sdk/.git")).readEnvironment().findGitDir().build();
+	    Repository repository = builder.setGitDir(new File("C:/Users/Dan/AppData/Local/Temp/phonegap-facebook-plugin3422070316710183144/.git")).readEnvironment().findGitDir().build();
 		
 		ShowChangedFilesBetweenCommits newfiles = new ShowChangedFilesBetweenCommits();
 		ArrayList<String > result = newfiles.changedFiles(repository);

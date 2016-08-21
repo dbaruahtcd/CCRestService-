@@ -31,7 +31,7 @@ public class WalkAllCommits {
             Iterable<RevCommit> commits = git.log().all().call();
             int count = 0;
             for (RevCommit commit : commits) {
-                System.out.println("LogCommit: " + commit);
+               // System.out.println("LogCommit: " + commit);
                 count++;
                 commitIds.add(commit.toString());
             }

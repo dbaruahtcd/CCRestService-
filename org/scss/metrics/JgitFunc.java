@@ -134,7 +134,7 @@ public class JgitFunc {
                 //System.out.println("Commit: " + rev /* + ", name: " + rev.getName() + ", id: " + rev.getId().getName() */);
                 count++;
             }
-            System.out.println("Had " + count + " commits on " + fn);
+           // System.out.println("Had " + count + " commits on " + fn);
             return count;
         }
     }

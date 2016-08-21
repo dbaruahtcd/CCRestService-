@@ -2,6 +2,7 @@ package org.scss.jgit.porcelain;
 
 
 import org.scss.jgit.helper.*;
+import org.scss.jgit.helper.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -55,7 +56,7 @@ public class CloneRemoteRepository {
 		}
 		else
 		{
-			return null;
+			return new File(FixedParams.getLocalGitDir());
 		}
     	
     	

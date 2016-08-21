@@ -40,19 +40,29 @@ public class RestRequestHandlerThreaded {
 		return gitParentDirStr;
 	}
 	
+	public static void setParentDir( String loc)
+	{
+		gitParentDirStr = loc;
+	}
+	
 	@SuppressWarnings({ "unused", "unchecked" })
 	public void serverRequest(String url, Boolean isLocallyPresent, Boolean isReRun) throws IOException, NoHeadException, GitAPIException, InterruptedException, ExecutionException
 	{
 		//Arraylist for storing the file urls
 		ArrayList<String>  listFiles = new ArrayList<String>();
-		
+		//Declared in case a different url is passed in
+		//String url1;
 		//setting the project url value for the json file
-		FixedParams.setProjectUrl(url);
+		//if(!isLocallyPresent)
+			FixedParams.setProjectUrl(url);
+		//else
+			//url = FixedParams.getRemoteUrl();
 		
 		// download a remote repository
 		CloneRemoteRepository  cloneRemote = new CloneRemoteRepository();
 		File dotGitDir = cloneRemote.cloneRepo(url, isLocallyPresent);
 		gitParentDirStr = dotGitDir.getParent();
+		//setParentDir(gitParentDirStr);
 		File gitParentDir = new File(gitParentDirStr);
 		
 		// initialize  a repository
@@ -86,7 +96,7 @@ public class RestRequestHandlerThreaded {
 		 //headerObj.put("Date :", ""+LocalDateTime.now()+"");
 		 createJsonHeader("Date", ""+ LocalDateTime.now());
 		 
-		 createJsonHeader("ProjectURL", FixedParams.getRemoteUrl());
+		 createJsonHeader("ProjectURL", FixedParams.getProjectUrl());
 		 createJsonHeader("Commiter",metrics.getCommiterIdentity() );
 		 createJsonHeader("LCommit",WalkAllCommits.getLastCommitId(repository));
 		 
@@ -106,7 +116,7 @@ public class RestRequestHandlerThreaded {
 			
 			CalculateCC worker = new CalculateCC(new File(str));
 			Future<Integer> complexityCountFile = (Future<Integer>) executor.submit(worker);
-			System.out.print("complexity is : " + complexityCountFile.get() + "\t");
+			//System.out.print("complexity is : " + complexityCountFile.get() + "\t");
 			
             String relPath = FileHandler.getRelativePath(str, gitParentDirStr);
             int commitCount = metrics.countCommitsForFile(relPath);
@@ -279,7 +289,15 @@ public class RestRequestHandlerThreaded {
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException, InterruptedException, ExecutionException
 	{
 		RestRequestHandlerThreaded request = new RestRequestHandlerThreaded();
-		request.serverRequest("https://github.com/hackedteam/vector-rmi.git",false, false);
+		//request.serverRequest("https://github.com/hackedteam/vector-rmi.git",false, false);
+		
+		// 1. https://github.com/google/guava.git
+		// 2. https://github.com/gameclosure/facebook.git
+		// 3. https://github.com/facebook/facebook-android-sdk.git 
+		//4. https://github.com/Wizcorp/phonegap-facebook-plugin.git
+		// 5. https://github.com/antonkrasov/AndroidSocialNetworks.git
+		
+		request.serverRequest("https://github.com/antonkrasov/AndroidSocialNetworks.git",false, false);
 	}
 	
 	
